@@ -3,12 +3,14 @@ from dotenv import load_dotenv
 from base64decoder import validate_base64
 import os
 from voice_detector import get_prediction
+import joblib
 
 load_dotenv("secret_key.env")
 VALID_API_KEY = os.getenv("API_KEY")
-
 REQUIRED_FIELDS = ["language", "audioFormat", "audioBase64"]
 LANGUAGES = ["Tamil", "English", "Hindi", "Malayalam", "Telugu"]
+MODEL_FILE_NAME = 'voice_model.joblib'
+VOICE_MODEL = joblib.load(MODEL_FILE_NAME, mmap_mode= 'r')
 
 app = Flask(__name__)
 
@@ -17,7 +19,7 @@ def hello():
     return "Hello API"
 
 @app.route('/voice-detection', methods=['POST'])
-def myFun():
+def voice_detect():
     '''
         At first validating the request to prevent error in core steps
     '''
@@ -54,7 +56,7 @@ def myFun():
         Utilizing prediction of model
     '''
 
-    label, conf, explanation = get_prediction(data["language"])
+    label, conf, explanation = get_prediction(data["language"], VOICE_MODEL)
 
     # If all validations pass
     return throw_success(data["language"], label, conf, explanation), 200
@@ -75,5 +77,4 @@ def throw_success(language, prediction, confidence, explanation):
     })
 
 if(__name__ == "__main__"):
-
     app.run(debug=True, host="0.0.0.0", port=5000)
