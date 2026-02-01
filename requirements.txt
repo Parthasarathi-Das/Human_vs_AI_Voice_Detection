@@ -13,6 +13,7 @@ dotenv==0.9.9
 executing==2.2.1
 Flask==3.1.2
 fonttools==4.61.1
+gunicorn==21.2.0
 idna==3.11
 ipython_pygments_lexers==1.1.1
 itsdangerous==2.2.0
@@ -58,4 +59,5 @@ typing_extensions==4.15.0
 tzdata==2025.3
 urllib3==2.6.3
 wcwidth==0.5.0
+
 Werkzeug==3.1.5
