@@ -1,13 +1,11 @@
-import joblib
 import librosa
 import numpy as np
 import pandas as pd
 import random as rd
 
 NUM_MFCC = 13 
-MODEL_FILE_NAME = 'voice_model.joblib'
+
 AUDIO_PATH = "temp.mp3"
-VOICE_MODEL = joblib.load(MODEL_FILE_NAME, mmap_mode= 'r')
 AI_EXPLANATION = "Unnatural pitch consistency and robotic speech patterns detected"
 HUMAN_EXPLANATION = "Natural pitch variations and authentic speech patterns detected"
 
@@ -17,10 +15,9 @@ expected_feature_columns = (
     ['language_Eng', 'language_Hindi', 'language_Malayalam', 'language_Tamil', 'language_Telugu']
 )
 
-print(f"LightGBM model loaded successfully from {MODEL_FILE_NAME}")
 print(f"\nProcessing input audio file for prediction: {AUDIO_PATH}")
 
-def get_prediction(input_language):
+def get_prediction(input_language, model):
     try:
         y_input, sr_input = librosa.load(AUDIO_PATH, sr=None)
         mfccs_input = librosa.feature.mfcc(y=y_input, sr=sr_input, n_mfcc=NUM_MFCC)
@@ -57,8 +54,8 @@ def get_prediction(input_language):
         #print(f"\nShape of preprocessed input sample DataFrame: {df_input_sample_processed.shape}")
 
         # --- 4. Make a prediction and get confidence level ---
-        prediction = VOICE_MODEL.predict(df_input_sample_processed)
-        prediction_proba = VOICE_MODEL.predict_proba(df_input_sample_processed)
+        prediction = model.predict(df_input_sample_processed)
+        prediction_proba = model.predict_proba(df_input_sample_processed)
 
         # --- 5. Interpret and display the prediction ---
         predicted_label = 'AI_GENERATED' if prediction[0] == 1 else 'HUMAN'
