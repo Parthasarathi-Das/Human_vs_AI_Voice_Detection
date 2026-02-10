@@ -57,7 +57,10 @@ def voice_detect():
     '''
 
     label, conf, explanation = get_prediction(data["language"], VOICE_MODEL)
-
+    
+    if(label == "ERROR"):
+        return throw_error("An Internal error has occured on our side\n"+explanation), 400
+    
     # If all validations pass
     return throw_success(data["language"], label, conf, explanation), 200
 

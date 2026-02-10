@@ -65,9 +65,9 @@ def get_prediction(input_language, model):
 
     except Exception as e:
         print(f"An error occurred during processing: {e}")
-        predicted_label =  rd.sample(['AI_GENERATED', 'HUMAN'])
-        confidence = rd.uniform(0.5, 1.0)
-        explanation = AI_EXPLANATION if predicted_label == 'AI_GENERATED' else HUMAN_EXPLANATION
+        predicted_label =  "ERROR"
+        confidence = 0.00
+        explanation = str(e)
         return predicted_label, round(confidence, 2), explanation
 
 
